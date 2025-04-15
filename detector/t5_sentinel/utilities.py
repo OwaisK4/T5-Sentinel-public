@@ -10,7 +10,7 @@ def train(
     model: nn.Module,
     optimizer: nn.Module,
     dataloader: DataLoader,
-    selectedDataset: Tuple[str] = ('Human', 'ChatGPT', 'PaLM', 'LLaMA')
+    selectedDataset: Tuple[str] = ('Human', 'ChatGPT', 'Claude', 'Gemini')
 ) -> Tuple[float, float]:
     model.train()
     accumulatedLoss, accumulatedCorrect, accumulatedBatchSize = 0, 0, 0
@@ -47,7 +47,7 @@ def train(
 def validate(
     model: nn.Module,
     dataloader: DataLoader,
-    selectedDataset: Tuple[str] = ('Human', 'ChatGPT', 'PaLM', 'LLaMA')
+    selectedDataset: Tuple[str] = ('Human', 'ChatGPT', 'Claude', 'Gemini')
 ) -> float:
     model.eval()
     accumulatedCorrect = 0

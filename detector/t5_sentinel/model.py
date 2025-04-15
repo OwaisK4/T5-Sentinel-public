@@ -13,7 +13,7 @@ class Sentinel(nn.Module):
         self.backbone: Backbone = Backbone.from_pretrained(config.backbone.name)
         self.config = config
     
-    def forward(self, corpus_ids: Tensor, corpus_mask: Tensor, label_ids: Optional[Tensor] = None, selectedDataset: Tuple[str] = ('Human', 'ChatGPT', 'PaLM', 'LLaMA', 'GPT2')) -> SentinelOutput:
+    def forward(self, corpus_ids: Tensor, corpus_mask: Tensor, label_ids: Optional[Tensor] = None, selectedDataset: Tuple[str] = ('Human', 'ChatGPT', 'Claude', 'Gemini')) -> SentinelOutput:
         '''
         Args:
             corpus_ids (Tensor): The input corpus ids.

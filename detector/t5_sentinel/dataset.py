@@ -15,7 +15,7 @@ class Dataset(utils.data.Dataset):
         label (list[str]): The labels of the dataset.
         tokenizer (Tokenizer): The tokenizer used.
     '''
-    def __init__(self, partition: str, selectedDataset: Tuple[str] = ('Human', 'ChatGPT', 'PaLM', 'LLaMA')):
+    def __init__(self, partition: str, selectedDataset: Tuple[str] = ('Human', 'ChatGPT', 'Claude', 'Gemini')):
         super().__init__()
         
         self.corpus, self.label = [], []

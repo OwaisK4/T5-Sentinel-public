@@ -10,7 +10,7 @@
 result/cache/*.json
 
 # Dataset
-*.jsonl
+# *.jsonl
 
 # Weight Files
 *.pt
