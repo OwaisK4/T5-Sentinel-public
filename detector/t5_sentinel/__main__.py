@@ -1,5 +1,6 @@
 import os
-import wandb
+
+# import wandb
 import torch
 from tqdm import tqdm
 import torch.nn as nn
@@ -51,21 +52,21 @@ optimizer = optim.AdamW(
 # Task and Cache
 ##############################################################################
 
-task = wandb.init(
-    name=config.id,
-    project="llm-sentinel",
-    entity="deep-learner",
-    id="5gk3khsd",
-    resume="must",
-)
+# task = wandb.init(
+#     name=config.id,
+#     project="llm-sentinel",
+#     entity="deep-learner",
+#     id="5gk3khsd",
+#     resume="must",
+# )
 
-wandb.save("detector/t5_sentinel/__init__.py")
-wandb.save("detector/t5_sentinel/__main__.py")
-wandb.save("detector/t5_sentinel/dataset.py")
-wandb.save("detector/t5_sentinel/model.py")
-wandb.save("detector/t5_sentinel/settings.yaml")
-wandb.save("detector/t5_sentinel/types.py")
-wandb.save("detector/t5_sentinel/utilities.py")
+# wandb.save("detector/t5_sentinel/__init__.py")
+# wandb.save("detector/t5_sentinel/__main__.py")
+# wandb.save("detector/t5_sentinel/dataset.py")
+# wandb.save("detector/t5_sentinel/model.py")
+# wandb.save("detector/t5_sentinel/settings.yaml")
+# wandb.save("detector/t5_sentinel/types.py")
+# wandb.save("detector/t5_sentinel/utilities.py")
 
 cache = f"storage/{config.id}"
 os.path.exists(cache) or os.makedirs(cache)
@@ -90,14 +91,14 @@ for epoch in range(startEpoch, config.epochs):
     trainLoss, trainAccuracy = train(model, optimizer, train_loader)
     validAccuracy = validate(model, valid_loader)
 
-    wandb.log(
-        {
-            "Training Loss": trainLoss,
-            "Training Accuracy": trainAccuracy * 100,
-            "Validation Accuracy": validAccuracy * 100,
-            "Learning Rate": learnRate,
-        }
-    )
+    # wandb.log(
+    #     {
+    #         "Training Loss": trainLoss,
+    #         "Training Accuracy": trainAccuracy * 100,
+    #         "Validation Accuracy": validAccuracy * 100,
+    #         "Learning Rate": learnRate,
+    #     }
+    # )
 
     tqdm.write("Training Accuracy {:.2%}".format(trainAccuracy))
     tqdm.write("Training Loss {:.4f}".format(trainLoss))
@@ -106,9 +107,11 @@ for epoch in range(startEpoch, config.epochs):
 
     checkpoint = {
         "epochIter": epoch,
-        "model": model.module.state_dict()
-        if isinstance(model, nn.DataParallel)
-        else model.state_dict(),
+        "model": (
+            model.module.state_dict()
+            if isinstance(model, nn.DataParallel)
+            else model.state_dict()
+        ),
         "optimizer": optimizer.state_dict(),
         "validAccuracy": validAccuracy,
     }
