@@ -17,11 +17,10 @@ from pipeline.lib.import_zerogpt_result import (
 
 def calc_t5_specific_class_hidden(prediction_idx: int, positive_class: str):
     evaluate_paths = [
-        Path("./data/split/open-web-text/test-dirty.jsonl"),
-        Path("./data/split/open-gpt-text/test-dirty.jsonl"),
-        Path("./data/split/open-palm-text/test-dirty.jsonl"),
-        Path("./data/split/open-llama-text/test-dirty.jsonl"),
-        Path("./data/split/gpt2-output/test-dirty.jsonl"),
+        Path("./data/split/Human/test-dirty.jsonl"),
+        Path("./data/split/GPT-4/test-dirty.jsonl"),
+        Path("./data/split/Gemini/test-dirty.jsonl"),
+        Path("./data/split/Claude/test-dirty.jsonl"),
     ]
     predictions = T5_hidden.evaluate_predictions(evaluate_paths)
 
