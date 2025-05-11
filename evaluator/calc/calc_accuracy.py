@@ -59,7 +59,7 @@ def calc_t5_specific_class_full(prediction_idx: int, positive_class: str):
 
 def calc_t5_full_statistics(digit=3):
     # categories = ["openweb", "chatgpt", "palm", "llama", "gpt2_xl"]
-    categories = ["Human", "ChatGPT", "Gemini", "Claude"]
+    categories = ["Human", "ChatGPT", "Claude", "Gemini"]
     recalls, precisions, f1s = [], [], []
 
     for cate_idx, category in enumerate(categories):
@@ -88,7 +88,7 @@ def calc_t5_full_statistics(digit=3):
 
 def calc_t5_hidden_statistics(digit=3):
     # categories = ["openweb", "chatgpt", "palm", "llama", "gpt2_xl"]
-    categories = ["Human", "ChatGPT", "Gemini", "Claude"]
+    categories = ["Human", "ChatGPT", "Claude", "Gemini"]
     recalls, precisions, f1s = [], [], []
 
     for cate_idx, category in enumerate(categories):
@@ -491,7 +491,7 @@ if __name__ == "__main__":
     TASKS = [
         # For table 3. in paper
         calc_t5_full_statistics,
-        calc_t5_hidden_statistics,
+        # calc_t5_hidden_statistics,
         # calc_openai_baseline_statistics,
         # calc_zerogpt_baseline_statistics,
         ################################################################################################################
@@ -546,19 +546,19 @@ if __name__ == "__main__":
         # calc_zerogpt_baseline_statistics_detail(
         #     Path("data", "baselines", "zerogpt_classifier_output", "gpt2-output.jsonl")
         # ),
-        calc_t5_full_statistics_detail("test-dirty.jsonl", "chatgpt", 1),
-        calc_t5_full_statistics_detail("test-dirty.jsonl", "palm", 2),
-        calc_t5_full_statistics_detail("test-dirty.jsonl", "llama", 3),
-        calc_t5_full_statistics_detail("test-dirty.jsonl", "gpt2_xl", 4),
-        calc_t5_hidden_statistics_detail(
-            Path("data", "split", "GPT-4", "test-dirty.jsonl")
-        ),
-        calc_t5_hidden_statistics_detail(
-            Path("data", "split", "Gemini-Pro", "test-dirty.jsonl")
-        ),
-        calc_t5_hidden_statistics_detail(
-            Path("data", "split", "Claude-Instant-v1", "test-dirty.jsonl")
-        ),
+        calc_t5_full_statistics_detail("test-dirty.jsonl", "ChatGPT", 1),
+        calc_t5_full_statistics_detail("test-dirty.jsonl", "Claude", 2),
+        calc_t5_full_statistics_detail("test-dirty.jsonl", "Gemini", 3),
+        # calc_t5_full_statistics_detail("test-dirty.jsonl", "gpt2_xl", 3),
+        # calc_t5_hidden_statistics_detail(
+        #     Path("data", "split", "GPT-4", "test-dirty.jsonl")
+        # ),
+        # calc_t5_hidden_statistics_detail(
+        #     Path("data", "split", "Gemini-Pro", "test-dirty.jsonl")
+        # ),
+        # calc_t5_hidden_statistics_detail(
+        #     Path("data", "split", "Claude-Instant-v1", "test-dirty.jsonl")
+        # ),
         # calc_t5_hidden_statistics_detail(
         #     Path("data", "split", "gpt2-output", "test-dirty.jsonl")
         # ),
@@ -566,23 +566,23 @@ if __name__ == "__main__":
         # For table 6.
         calc_t5_full_statistics_detail("test-dirty.jsonl", "Human", 0),
         calc_t5_full_statistics_detail("test-dirty.jsonl", "ChatGPT", 1),
-        calc_t5_full_statistics_detail("test-dirty.jsonl", "Gemini", 2),
-        calc_t5_full_statistics_detail("test-dirty.jsonl", "Claude", 3),
+        calc_t5_full_statistics_detail("test-dirty.jsonl", "Claude", 2),
+        calc_t5_full_statistics_detail("test-dirty.jsonl", "Gemini", 3),
         # calc_t5_full_statistics_detail("test-dirty.jsonl", "gpt2_xl", 4),
         calc_t5_full_statistics_detail("test.variant1.jsonl", "Human", 0),
         calc_t5_full_statistics_detail("test.variant1.jsonl", "ChatGPT", 1),
-        calc_t5_full_statistics_detail("test.variant1.jsonl", "Gemini", 2),
-        calc_t5_full_statistics_detail("test.variant1.jsonl", "Claude", 3),
+        calc_t5_full_statistics_detail("test.variant1.jsonl", "Claude", 2),
+        calc_t5_full_statistics_detail("test.variant1.jsonl", "Gemini", 3),
         # calc_t5_full_statistics_detail("test.variant1.jsonl", "gpt2_xl", 4),
         calc_t5_full_statistics_detail("test.variant2.jsonl", "Human", 0),
         calc_t5_full_statistics_detail("test.variant2.jsonl", "ChatGPT", 1),
-        calc_t5_full_statistics_detail("test.variant2.jsonl", "Gemini", 2),
-        calc_t5_full_statistics_detail("test.variant2.jsonl", "Claude", 3),
+        calc_t5_full_statistics_detail("test.variant2.jsonl", "Claude", 2),
+        calc_t5_full_statistics_detail("test.variant2.jsonl", "Gemini", 3),
         # calc_t5_full_statistics_detail("test.variant2.jsonl", "gpt2_xl", 4),
         calc_t5_full_statistics_detail("test.variant3.jsonl", "Human", 0),
         calc_t5_full_statistics_detail("test.variant3.jsonl", "ChatGPT", 1),
-        calc_t5_full_statistics_detail("test.variant3.jsonl", "Gemini", 2),
-        calc_t5_full_statistics_detail("test.variant3.jsonl", "Claude", 3),
+        calc_t5_full_statistics_detail("test.variant3.jsonl", "Claude", 2),
+        calc_t5_full_statistics_detail("test.variant3.jsonl", "Gemini", 3),
         # calc_t5_full_statistics_detail("test.variant3.jsonl", "gpt2_xl", 4),
         # calculate_punctuation_removal("test-dirty.jsonl", "openweb", 0, "."),
         # calculate_punctuation_removal("test-dirty.jsonl", "chatgpt", 1, "."),
@@ -621,8 +621,8 @@ if __name__ == "__main__":
         # calculate_punctuation_removal("test-dirty.jsonl", "gpt2_xl", 4, '"'),
         calculate_punctuation_removal("test-dirty.jsonl", "Human", 0, "*"),
         calculate_punctuation_removal("test-dirty.jsonl", "ChatGPT", 1, "*"),
-        calculate_punctuation_removal("test-dirty.jsonl", "Gemini", 2, "*"),
-        calculate_punctuation_removal("test-dirty.jsonl", "Claude", 3, "*"),
+        calculate_punctuation_removal("test-dirty.jsonl", "Claude", 2, "*"),
+        calculate_punctuation_removal("test-dirty.jsonl", "Gemini", 3, "*"),
         # calculate_punctuation_removal("test-dirty.jsonl", "gpt2_xl", 4, "*"),
         # calc_t5_full_statistics_detail("test.variant4.jsonl", "openweb", 0),
         # calc_t5_full_statistics_detail("test.variant4.jsonl", "chatgpt", 1),
