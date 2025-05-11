@@ -19,8 +19,8 @@ def calc_t5_specific_class_hidden(prediction_idx: int, positive_class: str):
     evaluate_paths = [
         Path("./data/split/Human/test-dirty.jsonl"),
         Path("./data/split/GPT-4/test-dirty.jsonl"),
-        Path("./data/split/Gemini/test-dirty.jsonl"),
-        Path("./data/split/Claude/test-dirty.jsonl"),
+        Path("./data/split/Gemini-Pro/test-dirty.jsonl"),
+        Path("./data/split/Claude-Instant-v1/test-dirty.jsonl"),
     ]
     predictions = T5_hidden.evaluate_predictions(evaluate_paths)
 
@@ -40,8 +40,8 @@ def calc_t5_specific_class_full(prediction_idx: int, positive_class: str):
     evaluate_paths = [
         Path("./data/split/Human/test-dirty.jsonl"),
         Path("./data/split/GPT-4/test-dirty.jsonl"),
-        Path("./data/split/Gemini/test-dirty.jsonl"),
-        Path("./data/split/Claude/test-dirty.jsonl"),
+        Path("./data/split/Gemini-Pro/test-dirty.jsonl"),
+        Path("./data/split/Claude-Instant-v1/test-dirty.jsonl"),
     ]
     predictions = T5_full.evaluate_predictions(evaluate_paths)
 
@@ -246,8 +246,8 @@ def calc_t5_full_statistics_detail(file_name: str, pos_label: str, pos_index: in
             [
                 Path("data", "split", "Human", file_name),
                 Path("data", "split", "GPT-4", file_name),
-                Path("data", "split", "Gemini", file_name),
-                Path("data", "split", "Claude", file_name),
+                Path("data", "split", "Gemini-Pro", file_name),
+                Path("data", "split", "Claude-Instant-v1", file_name),
             ]
         )
         reformulated_predictions = []
@@ -291,8 +291,8 @@ def calc_t5_hidden_statistics_detail_full(
             [
                 Path("data", "split", "Human", file_name),
                 Path("data", "split", "GPT-4", file_name),
-                Path("data", "split", "Gemini", file_name),
-                Path("data", "split", "Claude", file_name),
+                Path("data", "split", "Gemini-Pro", file_name),
+                Path("data", "split", "Claude-Instant-v1", file_name),
             ]
         )
         reformulated_predictions = []
@@ -370,8 +370,8 @@ def calc_t5_full_ablation_statistics(ablation_filename):
             [
                 Path("data", "split", "Human", ablation_filename),
                 Path("data", "split", "GPT-4", ablation_filename),
-                Path("data", "split", "Gemini", ablation_filename),
-                Path("data", "split", "Claude", ablation_filename),
+                Path("data", "split", "Gemini-Pro", ablation_filename),
+                Path("data", "split", "Claude-Instant-v1", ablation_filename),
             ]
         )
         reformulated_predictions = []
@@ -408,8 +408,8 @@ def calculate_punctuation_removal(
             [
                 Path("data", "split", "Human", filename),
                 Path("data", "split", "GPT-4", filename),
-                Path("data", "split", "Gemini", filename),
-                Path("data", "split", "Claude", filename),
+                Path("data", "split", "Gemini-Pro", filename),
+                Path("data", "split", "Claude-Instant-v1", filename),
             ],
             singleton,
         )
@@ -554,10 +554,10 @@ if __name__ == "__main__":
             Path("data", "split", "GPT-4", "test-dirty.jsonl")
         ),
         calc_t5_hidden_statistics_detail(
-            Path("data", "split", "Gemini", "test-dirty.jsonl")
+            Path("data", "split", "Gemini-Pro", "test-dirty.jsonl")
         ),
         calc_t5_hidden_statistics_detail(
-            Path("data", "split", "Claude", "test-dirty.jsonl")
+            Path("data", "split", "Claude-Instant-v1", "test-dirty.jsonl")
         ),
         # calc_t5_hidden_statistics_detail(
         #     Path("data", "split", "gpt2-output", "test-dirty.jsonl")
