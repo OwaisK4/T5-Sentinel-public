@@ -502,7 +502,7 @@ if __name__ == "__main__":
         # calc_t5_full_ablation_statistics("test.variant3.jsonl"),
         # calc_t5_full_ablation_statistics("test.variant4.jsonl"),
         # For table 4.
-        calc_t5_hidden_statistics_detail_full("test-dirty.jsonl", "openweb", 0),
+        # calc_t5_hidden_statistics_detail_full("test-dirty.jsonl", "openweb", 0),
         # calc_t5_hidden_statistics_detail_full("test-dirty.jsonl", "chatgpt", 1),
         # calc_t5_hidden_statistics_detail_full("test-dirty.jsonl", "palm", 2),
         # calc_t5_hidden_statistics_detail_full("test-dirty.jsonl", "llama", 3),
