@@ -87,8 +87,8 @@ def plot_distribution():
     gemini_counter = filter_dict(gemini_counter, selected_keys)
     selected_keys = sort_keys(human_counter, selected_keys)
 
-    fig, axes = plt.subplots(ncols=1, nrows=5, dpi=200, sharey=True, sharex=True)
-    colors = ["#2576b0", "#fc822e", "#349f3c", "#d32f2e", "#9368b9"]
+    fig, axes = plt.subplots(ncols=1, nrows=4, dpi=200, sharey=True, sharex=True)
+    colors = ["#2576b0", "#fc822e", "#349f3c", "#d32f2e"]
     categories = ["Human", "GPT-4", "Claude 3.5 Haiku", "Gemini 2.0 Flash"]
     all_data = [human_counter, gpt4_counter, claude_counter, gemini_counter]
 
@@ -111,6 +111,7 @@ def plot_distribution():
 
     fig.text(0.01, 0.5, "Frequency", va="center", rotation="vertical")
     fig.text(0.5, 0.01, "Most common character in our collected dataset", ha="center")
+    fig.tight_layout()
     fig.savefig("./result/data/dataset_char_count.pdf")
 
 
@@ -158,10 +159,7 @@ def plot_punc_distribution():
 
 
 if __name__ == "__main__":
-    TASKS = [
-        # plot_distribution,
-        plot_punc_distribution
-    ]
+    TASKS = [plot_distribution, plot_punc_distribution]
     for task in TASKS:
         print(f"Executing {task.__name__}")
         task()
