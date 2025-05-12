@@ -24,31 +24,29 @@ def argeq(a, b):
 
 @memoize(Path("cache", "dataset_str_length_cache.pt"), arg_eq=argeq)
 def get_data_tok_length(
-    dataset_name: Tp.Literal["human", "chatgpt", "palm", "llama", "gpt2"]
+    dataset_name: Tp.Literal["Human", "ChatGPT", "Claude", "Gemini"],
 ):
     selected_files = {
-        "human": Human_Data,
-        "chatgpt": GPT3_Data,
-        "palm": PaLM_Data,
-        "llama": LLaMA_Data,
-        "gpt2": GPT2_Data,
+        "Human": Human_Data,
+        "ChatGPT": GPT4_Data,
+        "Claude": Claude_Data,
+        "Gemini": Gemini_Data,
     }[dataset_name]
     all_data = load_data(selected_files)
     return [get_token_length(s) for s in tqdm(all_data)]
 
 
 def plot_data_length_distribution():
-    human_len = get_data_tok_length("human")
-    gpt3_len = get_data_tok_length("chatgpt")
-    palm_len = get_data_tok_length("palm")
-    llama_len = get_data_tok_length("llama")
-    gpt2_len = get_data_tok_length("gpt2")
+    human_len = get_data_tok_length("Human")
+    gpt4_len = get_data_tok_length("ChatGPT")
+    claude_len = get_data_tok_length("Claude")
+    gemini_len = get_data_tok_length("Gemini")
 
-    colors = ["#2576b0", "#fc822e", "#349f3c", "#d32f2e", "#9368b9"]
-    categories = ["Human", "GPT3.5", "PaLM", "LLaMA", "GPT2"]
-    all_data = [human_len, gpt3_len, palm_len, llama_len, gpt2_len]
+    colors = ["#2576b0", "#fc822e", "#349f3c", "#d32f2e"]
+    categories = ["Human", "GPT-4", "Claude 3.5 Haiku", "Gemini 2.0 Flash"]
+    all_data = [human_len, gpt4_len, claude_len, gemini_len]
 
-    fig, axes = plt.subplots(ncols=1, nrows=5, dpi=200, sharey=True)
+    fig, axes = plt.subplots(ncols=1, nrows=4, dpi=200, sharey=True)
     for idx, (category, data, color, ax) in enumerate(
         zip(categories, all_data, colors, axes)
     ):
@@ -71,28 +69,26 @@ def plot_data_length_distribution():
 
     fig.subplots_adjust(wspace=0, hspace=0.2)
     fig.text(0.01, 0.5, "Frequency", va="center", rotation="vertical")
-    fig.text(0.5, 0.01, "Sample Length in OpenLLMText dataset (# Token)", ha="center")
+    fig.text(0.5, 0.01, "Sample Length in our collected dataset (# Token)", ha="center")
     fig.savefig("./result/data/dataset_length_token.pdf")
 
 
 def plot_data_length_distribution_cut():
-    human_len = get_data_tok_length("human")
-    gpt3_len = get_data_tok_length("chatgpt")
-    palm_len = get_data_tok_length("palm")
-    llama_len = get_data_tok_length("llama")
-    gpt2_len = get_data_tok_length("gpt2")
+    human_len = get_data_tok_length("Human")
+    gpt4_len = get_data_tok_length("ChatGPT")
+    claude_len = get_data_tok_length("Claude")
+    gemini_len = get_data_tok_length("Gemini")
 
     human_len = [min(l, 512) for l in human_len]
-    gpt3_len = [min(l, 512) for l in gpt3_len]
-    palm_len = [min(l, 512) for l in palm_len]
-    llama_len = [min(l, 512) for l in llama_len]
-    gpt2_len = [min(l, 512) for l in gpt2_len]
+    gpt4_len = [min(l, 512) for l in gpt4_len]
+    claude_len = [min(l, 512) for l in claude_len]
+    gemini_len = [min(l, 512) for l in gemini_len]
 
-    colors = ["#2576b0", "#fc822e", "#349f3c", "#d32f2e", "#9368b9"]
-    categories = ["Human", "GPT3.5", "PaLM", "LLaMA", "GPT2"]
-    all_data = [human_len, gpt3_len, palm_len, llama_len, gpt2_len]
+    colors = ["#2576b0", "#fc822e", "#349f3c", "#d32f2e"]
+    categories = ["Human", "GPT-4", "Claude 3.5 Haiku", "Gemini 2.0 Flash"]
+    all_data = [human_len, gpt4_len, claude_len, gemini_len]
 
-    fig, axes = plt.subplots(ncols=1, nrows=5, dpi=200, sharey=True)
+    fig, axes = plt.subplots(ncols=1, nrows=4, dpi=200, sharey=True)
     for idx, (category, data, color, ax) in enumerate(
         zip(categories, all_data, colors, axes)
     ):
