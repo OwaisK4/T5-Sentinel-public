@@ -59,7 +59,8 @@ def plot_t5_full_pca_compare():
             Path("data", "split", "Gemini-Pro", "test-dirty.jsonl"),
         ]
     )
-    labels = ["Human", "GPT-4", "Claude 3.5 Haiku", "Gemini 2.0 Flash"]
+    # labels = ["Human", "GPT-4", "Claude 3.5 Haiku", "Gemini 2.0 Flash"]
+    labels = ["Human", "ChatGPT", "Claude", "Gemini"]
     Tarrays = pca_analysis(hiddens, labels, "t5_full_pca")
     fig = plt.figure(dpi=200)
     ax: plt.Axes = fig.add_subplot(1, 1, 1)
@@ -91,10 +92,7 @@ def plot_t5_full_pca_compare():
 
 
 if __name__ == "__main__":
-    TASKS = [
-        plot_t5_full_pca,
-        # plot_t5_full_pca_compare
-    ]
+    TASKS = [plot_t5_full_pca, plot_t5_full_pca_compare]
 
     for task in TASKS:
         print("Executing task: ", task.__name__)

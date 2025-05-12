@@ -198,10 +198,10 @@ def plot_t5_compare_with_baseline():
 if __name__ == "__main__":
     TASKS = [
         plot_t5_full_one_to_rest,
-        # plot_t5_full_ablation(0, "Human"),
-        # plot_t5_full_ablation(1, "ChatGPT"),
-        # plot_t5_full_ablation(2, "Claude"),
-        # plot_t5_full_ablation(3, "Gemini"),
+        plot_t5_full_ablation(0, "Human"),
+        plot_t5_full_ablation(1, "ChatGPT"),
+        plot_t5_full_ablation(2, "Claude"),
+        plot_t5_full_ablation(3, "Gemini"),
         # plot_t5_compare_with_baseline
     ]
 

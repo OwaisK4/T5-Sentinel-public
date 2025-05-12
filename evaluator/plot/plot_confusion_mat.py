@@ -55,17 +55,16 @@ def plot_full_confusion_mat_abalation(file_name: str, variant_level: int):
     def implement():
         predictions = T5_Full.evaluate_predictions(
             [
-                Path("data", "split", "open-web-text", file_name),
-                Path("data", "split", "open-gpt-text", file_name),
-                Path("data", "split", "open-palm-text", file_name),
-                Path("./data/split/open-llama-text", file_name),
-                Path("./data/split/gpt2-output", file_name),
+                Path("data", "split", "Human", file_name),
+                Path("data", "split", "GPT-4", file_name),
+                Path("data", "split", "Claude-Instant-v1", file_name),
+                Path("data", "split", "Gemini-Pro", file_name),
             ]
         )
-        display_labels = ["Human", "GPT3.5", "PaLM", "LLaMA", "GPT2"]
+        display_labels = ["Human", "GPT-4", "Claude 3.5 Haiku", "Gemini 2.0 Flash"]
 
         matrix = calculate_confusion_matrix(
-            predictions, ["openweb", "chatgpt", "palm", "llama", "gpt2_xl"]
+            predictions, ["Human", "ChatGPT", "Claude", "Gemini"]
         )
         fig: plt.Figure = plt.figure(dpi=200)
         ax: plt.Axes = fig.add_subplot(1, 1, 1)
@@ -111,17 +110,16 @@ def plot_full_confusion_mat_compare():
     ):
         predictions = T5_Full.evaluate_predictions(
             [
-                Path("data", "split", "open-web-text", variant),
-                Path("data", "split", "open-gpt-text", variant),
-                Path("data", "split", "open-palm-text", variant),
-                Path("data", "split", "open-llama-text", variant),
-                Path("data", "split", "gpt2-output", variant),
+                Path("data", "split", "Human", variant),
+                Path("data", "split", "GPT-4", variant),
+                Path("data", "split", "Claude-Instant-v1", variant),
+                Path("data", "split", "Gemini-Pro", variant),
             ]
         )
-        display_labels = ["Human", "GPT3.5", "PaLM", "LLaMA", "GPT2"]
+        display_labels = ["Human", "GPT-4", "Claude 3.5 Haiku", "Gemini 2.0 Flash"]
 
         matrix = calculate_confusion_matrix(
-            predictions, ["openweb", "chatgpt", "palm", "llama", "gpt2_xl"]
+            predictions, ["Human", "ChatGPT", "Claude", "Gemini"]
         )
         ax: plt.Axes = fig.add_subplot(2, 2, idx + 1)
         ax.imshow(
@@ -153,10 +151,10 @@ def plot_full_confusion_mat_compare():
 if __name__ == "__main__":
     TASKS = [
         plot_full_confusion_mat,
-        # plot_full_confusion_mat_abalation("test.variant1.jsonl", 1),
-        # plot_full_confusion_mat_abalation("test.variant2.jsonl", 2),
-        # plot_full_confusion_mat_abalation("test.variant3.jsonl", 3),
-        # plot_full_confusion_mat_abalation("test.variant4.jsonl", 4),
+        plot_full_confusion_mat_abalation("test.variant1.jsonl", 1),
+        plot_full_confusion_mat_abalation("test.variant2.jsonl", 2),
+        plot_full_confusion_mat_abalation("test.variant3.jsonl", 3),
+        plot_full_confusion_mat_abalation("test.variant4.jsonl", 4),
         # plot_full_confusion_mat_compare
     ]
 
