@@ -109,7 +109,7 @@ def explain(text, label):
     diff = model.injected_embedder.embed_result - model.injected_embedder.pad_result
     integrated_gradient = torch.norm((avg_gradient * diff)[0], dim=1)
 
-    pred_label = ["Human", "ChatGPT", "PaLM", "LLaMA", "GPT2"]
+    pred_label = ["Human", "ChatGPT", "Claude", "Gemini"]
     pred_idx = torch.argmax(prob).item()
     print(f"Predicted as {pred_label[pred_idx]} with prob of {prob[0, pred_idx]}")
 
