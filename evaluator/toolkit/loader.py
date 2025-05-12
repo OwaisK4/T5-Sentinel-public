@@ -16,15 +16,15 @@ GPT4_Data = [
 ]
 
 Claude_Data = [
-    Path("data", "split", "Claude", "train-dirty.jsonl"),
-    Path("data", "split", "Claude", "valid-dirty.jsonl"),
-    Path("data", "split", "Claude", "test-dirty.jsonl"),
+    Path("data", "split", "Claude-Instant-v1", "train-dirty.jsonl"),
+    Path("data", "split", "Claude-Instant-v1", "valid-dirty.jsonl"),
+    Path("data", "split", "Claude-Instant-v1", "test-dirty.jsonl"),
 ]
 
 Gemini_Data = [
-    Path("data", "split", "Gemini", "train-dirty.jsonl"),
-    Path("data", "split", "Gemini", "valid-dirty.jsonl"),
-    Path("data", "split", "Gemini", "test-dirty.jsonl"),
+    Path("data", "split", "Gemini-Pro", "train-dirty.jsonl"),
+    Path("data", "split", "Gemini-Pro", "valid-dirty.jsonl"),
+    Path("data", "split", "Gemini-Pro", "test-dirty.jsonl"),
 ]
 
 
