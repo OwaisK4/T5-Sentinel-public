@@ -8,8 +8,8 @@ from pathlib import Path
 from pipeline.lib.import_openai_result import import_openai_prediction_result
 from pipeline.lib.import_zerogpt_result import import_zerogpt_prediction_result
 
-import evaluator.models.t5_sentinel.t5_get_hidden_states                   as T5_Full
-import evaluator.models.t5_hidden.t5_get_hidden_states       as T5_Hidden
+import evaluator.models.t5_sentinel.t5_get_hidden_states as T5_Full
+import evaluator.models.t5_hidden.t5_get_hidden_states as T5_Hidden
 
 
 def get_openai_baseline_curve():
@@ -22,7 +22,7 @@ def get_openai_baseline_curve():
         new_entry["data"] = np.array([p_selected, 1 - p_selected])
         reformulated_predictions.append(new_entry)
 
-    curve = get_roc_binary(reformulated_predictions, "openweb")
+    curve = get_roc_binary(reformulated_predictions, "Human")
     return curve
 
 
@@ -36,19 +36,19 @@ def get_zerogpt_baseline_curve():
         new_entry["data"] = np.array([p_selected, 1 - p_selected])
         reformulated_predictions.append(new_entry)
 
-    curve = get_roc_binary(reformulated_predictions, "openweb")
+    curve = get_roc_binary(reformulated_predictions, "Human")
     return curve
 
 
-
 def get_t5_one_to_rest_roc_full(file_name, prediction_idx: int, pos_label: str):
-    predictions = T5_Full.evaluate_predictions([
-        Path("data", "split", "open-web-text", file_name),
-        Path("data", "split", "open-gpt-text", file_name),
-        Path("data", "split", "open-palm-text", file_name),
-        Path("./data/split/open-llama-text/", file_name),
-        Path("./data/split/gpt2-output/", file_name)
-    ])
+    predictions = T5_Full.evaluate_predictions(
+        [
+            Path("data", "split", "Human", file_name),
+            Path("data", "split", "GPT-4", file_name),
+            Path("data", "split", "Claude-Instant-v1", file_name),
+            Path("data", "split", "Gemini-Pro", file_name),
+        ]
+    )
     reformulated_predictions = []
     for entry in predictions:
         p_selected = entry["data"][prediction_idx]
@@ -60,13 +60,14 @@ def get_t5_one_to_rest_roc_full(file_name, prediction_idx: int, pos_label: str):
 
 
 def get_t5_one_to_rest_roc_hidden(file_name, prediction_idx: int, pos_label: str):
-    predictions = T5_Hidden.evaluate_predictions([
-        Path("data", "split", "open-web-text"  , file_name),
-        Path("data", "split", "open-gpt-text"  , file_name),
-        Path("data", "split", "open-palm-text" , file_name),
-        Path("data", "split", "open-llama-text", file_name),
-        Path("data", "split", "gpt2-output"    , file_name)
-    ])
+    predictions = T5_Hidden.evaluate_predictions(
+        [
+            Path("data", "split", "Human", file_name),
+            Path("data", "split", "GPT-4", file_name),
+            Path("data", "split", "Claude-Instant-v1", file_name),
+            Path("data", "split", "Gemini-Pro", file_name),
+        ]
+    )
     reformulated_predictions = []
     for entry in predictions:
         p_selected = entry["data"][prediction_idx]
@@ -76,27 +77,25 @@ def get_t5_one_to_rest_roc_hidden(file_name, prediction_idx: int, pos_label: str
     curve = get_roc_binary(reformulated_predictions, pos_label)
     return curve
 
+
 def plot_t5_full_one_to_rest():
-    curve0 = get_t5_one_to_rest_roc_full("test-dirty.jsonl", 0, "openweb")
-    curve1 = get_t5_one_to_rest_roc_full("test-dirty.jsonl", 1, "chatgpt")
-    curve2 = get_t5_one_to_rest_roc_full("test-dirty.jsonl", 2, "palm")
-    curve3 = get_t5_one_to_rest_roc_full("test-dirty.jsonl", 3, "llama")
-    curve4 = get_t5_one_to_rest_roc_full("test-dirty.jsonl", 4, "gpt2_xl")
+    curve0 = get_t5_one_to_rest_roc_full("test-dirty.jsonl", 0, "Human")
+    curve1 = get_t5_one_to_rest_roc_full("test-dirty.jsonl", 1, "ChatGPT")
+    curve2 = get_t5_one_to_rest_roc_full("test-dirty.jsonl", 2, "Claude")
+    curve3 = get_t5_one_to_rest_roc_full("test-dirty.jsonl", 3, "Gemini")
 
     print(f"Human   AUC: {auc(curve0[0], curve0[1])}")
-    print(f"GPT3.5  AUC: {auc(curve1[0], curve1[1])}")
-    print(f"PaLM    AUC: {auc(curve2[0], curve2[1])}")
-    print(f"LLaMA   AUC: {auc(curve3[0], curve3[1])}")
-    print(f"GPT2-XL AUC: {auc(curve4[0], curve4[1])}")
+    print(f"GPT-4  AUC: {auc(curve1[0], curve1[1])}")
+    print(f"Claude 3.5 Haiku    AUC: {auc(curve2[0], curve2[1])}")
+    print(f"Gemini 2.0 Flash   AUC: {auc(curve3[0], curve3[1])}")
 
     figure: plt.Figure = plt.figure(dpi=200)
     ax: plt.Axes = figure.add_subplot(1, 1, 1)
     # ax.set_prop_cycle('color', sns.color_palette("hls"))
     ax.plot(curve0[0], curve0[1], label="Human")
-    ax.plot(curve1[0], curve1[1], label="GPT3.5")
-    ax.plot(curve2[0], curve2[1], label="PaLM")
-    ax.plot(curve3[0], curve3[1], label="LLaMA")
-    ax.plot(curve4[0], curve4[1], label="GPT2-XL")
+    ax.plot(curve1[0], curve1[1], label="GPT-4")
+    ax.plot(curve2[0], curve2[1], label="Claude 3.5 Haiku")
+    ax.plot(curve3[0], curve3[1], label="Gemini 2.0 Flash")
     ax.set_xlim(-0.05, 1.05)
     ax.set_ylim(-0.05, 1.05)
     # ax.set_title("ROC Curves for T5-Sentinel for each \nclassification label on one-to-rest classification task")
@@ -109,26 +108,24 @@ def plot_t5_full_one_to_rest():
 
 
 def plot_t5_hidden_one_to_rest():
-    curve0 = get_t5_one_to_rest_roc_hidden("test-dirty.jsonl", 0, "openweb")
-    curve1 = get_t5_one_to_rest_roc_hidden("test-dirty.jsonl", 1, "chatgpt")
-    curve2 = get_t5_one_to_rest_roc_hidden("test-dirty.jsonl", 2, "palm")
-    curve3 = get_t5_one_to_rest_roc_hidden("test-dirty.jsonl", 3, "llama")
-    curve4 = get_t5_one_to_rest_roc_hidden("test-dirty.jsonl", 4, "gpt2_xl")
+    curve0 = get_t5_one_to_rest_roc_full("test-dirty.jsonl", 0, "Human")
+    curve1 = get_t5_one_to_rest_roc_full("test-dirty.jsonl", 1, "ChatGPT")
+    curve2 = get_t5_one_to_rest_roc_full("test-dirty.jsonl", 2, "Claude")
+    curve3 = get_t5_one_to_rest_roc_full("test-dirty.jsonl", 3, "Gemini")
 
     print(f"Human   AUC: {auc(curve0[0], curve0[1])}")
-    print(f"GPT3.5  AUC: {auc(curve1[0], curve1[1])}")
-    print(f"PaLM    AUC: {auc(curve2[0], curve2[1])}")
-    print(f"LLaMA   AUC: {auc(curve3[0], curve3[1])}")
-    print(f"GPT2-XL AUC: {auc(curve4[0], curve4[1])}")
+    print(f"GPT-4  AUC: {auc(curve1[0], curve1[1])}")
+    print(f"Claude 3.5 Haiku    AUC: {auc(curve2[0], curve2[1])}")
+    print(f"Gemini 2.0 Flash   AUC: {auc(curve3[0], curve3[1])}")
 
     figure: plt.Figure = plt.figure(dpi=200)
     ax: plt.Axes = figure.add_subplot(1, 1, 1)
+    ax.plot(curve0[0], curve0[1], label="Human")
     # ax.set_prop_cycle('color', sns.color_palette("hls"))
     ax.plot(curve0[0], curve0[1], label="Human")
-    ax.plot(curve1[0], curve1[1], label="GPT3.5")
-    ax.plot(curve2[0], curve2[1], label="PaLM")
-    ax.plot(curve3[0], curve3[1], label="LLaMA")
-    ax.plot(curve4[0], curve4[1], label="GPT2-XL")
+    ax.plot(curve1[0], curve1[1], label="GPT-4")
+    ax.plot(curve2[0], curve2[1], label="Claude 3.5 Haiku")
+    ax.plot(curve3[0], curve3[1], label="Gemini 2.0 Flash")
     ax.set_xlim(-0.05, 1.05)
     ax.set_ylim(-0.05, 1.05)
     # ax.set_title("ROC Curves for T5-Sentinel for each \nclassification label on one-to-rest classification task")
@@ -150,7 +147,7 @@ def plot_t5_full_ablation(pos: int, label: str):
 
         figure: plt.Figure = plt.figure(dpi=200)
         ax: plt.Axes = figure.add_subplot(1, 1, 1)
-        ax.set_prop_cycle('color', sns.color_palette("hls"))
+        ax.set_prop_cycle("color", sns.color_palette("hls"))
         ax.plot(curve_0[0], curve_0[1], label="Original")
         ax.plot(curve_1[0], curve_1[1], label="Remove Newline")
         ax.plot(curve_2[0], curve_2[1], label="Unicode to ASCII")
@@ -172,8 +169,8 @@ def plot_t5_full_ablation(pos: int, label: str):
 def plot_t5_compare_with_baseline():
     curve_openai = get_openai_baseline_curve()
     curve_zerogpt = get_zerogpt_baseline_curve()
-    curve_t5 = get_t5_one_to_rest_roc_full("test-dirty.jsonl", 0, "openweb")
-    curve_hidden = get_t5_one_to_rest_roc_hidden("test-dirty.jsonl", 0, "openweb")
+    curve_t5 = get_t5_one_to_rest_roc_full("test-dirty.jsonl", 0, "Human")
+    curve_hidden = get_t5_one_to_rest_roc_hidden("test-dirty.jsonl", 0, "Human")
 
     print(f"OpenAI      AUC: {auc(curve_openai[0], curve_openai[1])}")
     print(f"ZeroGPT     AUC: {auc(curve_zerogpt[0], curve_zerogpt[1])}")
@@ -201,12 +198,11 @@ def plot_t5_compare_with_baseline():
 if __name__ == "__main__":
     TASKS = [
         plot_t5_full_one_to_rest,
-        plot_t5_full_ablation(0, "openweb"),
-        plot_t5_full_ablation(1, "chatgpt"),
-        plot_t5_full_ablation(2, "palm"),
-        plot_t5_full_ablation(3, "llama"),
-        plot_t5_full_ablation(4, "gpt2_xl"),
-        plot_t5_compare_with_baseline
+        # plot_t5_full_ablation(0, "Human"),
+        # plot_t5_full_ablation(1, "ChatGPT"),
+        # plot_t5_full_ablation(2, "Claude"),
+        # plot_t5_full_ablation(3, "Gemini"),
+        # plot_t5_compare_with_baseline
     ]
 
     for task in TASKS:

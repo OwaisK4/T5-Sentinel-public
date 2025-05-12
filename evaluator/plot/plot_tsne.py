@@ -11,10 +11,16 @@ import evaluator.models.t5_hidden.t5_get_hidden_states as T5_Hidden
 
 def tsne_analysis(hidden_states, labels, perplexity):
     hiddens = [
-        [entry["data"][-1] for entry in hidden_states if entry["extra"]["source"] == label]
+        [
+            entry["data"][-1]
+            for entry in hidden_states
+            if entry["extra"]["source"] == label
+        ]
         for label in labels
     ]
-    Harrays = [np.concatenate(hidden, axis=0).reshape((len(hidden), -1)) for hidden in hiddens]
+    Harrays = [
+        np.concatenate(hidden, axis=0).reshape((len(hidden), -1)) for hidden in hiddens
+    ]
     X_original = np.concatenate(Harrays, axis=0)
 
     pca_core = PCA(n_components=50)
@@ -27,22 +33,23 @@ def tsne_analysis(hidden_states, labels, perplexity):
     separate_tsne = []
     accum = 0
     for h in hiddens:
-        separate_tsne.append(X_tsne[accum:accum+len(h)])
+        separate_tsne.append(X_tsne[accum : accum + len(h)])
         accum += len(h)
 
     return separate_tsne
 
 
 def plot_t5_full_tsne():
-    hiddens = T5_Full.evaluate_hidden_states([
-        Path("data", "split", "open-web-text", "test-dirty.jsonl"),
-        Path("data", "split", "open-gpt-text", "test-dirty.jsonl"),
-        Path("data", "split", "open-palm-text", "test-dirty.jsonl"),
-        Path("./data/split/open-llama-text/test-dirty.jsonl"),
-        Path("./data/split/gpt2-output/test-dirty.jsonl")
-    ])
-    labels = ["openweb", "chatgpt", "palm", "llama", "gpt2_xl"]
-    display_labels = ["Human", "GPT3.5", "PaLM", "LLaMA", "GPT2-XL"]
+    hiddens = T5_Full.evaluate_hidden_states(
+        [
+            Path("data", "split", "Human", "test-dirty.jsonl"),
+            Path("data", "split", "GPT-4", "test-dirty.jsonl"),
+            Path("data", "split", "Claude-Instant-v1", "test-dirty.jsonl"),
+            Path("data", "split", "Gemini-Pro", "test-dirty.jsonl"),
+        ]
+    )
+    labels = ["Human", "ChatGPT", "Claude", "Gemini"]
+    display_labels = ["Human", "GPT-4", "Claude 3.5 Haiku", "Gemini 2.0 Flash"]
     # perplexities = [5, 10, 25, 50, 75, 100]
     perplexities = [100]
     for perplexity in perplexities:
@@ -56,9 +63,10 @@ def plot_t5_full_tsne():
             random_mask = np.random.randn(*(transformed[:, 0].shape)) < 0.2
             ax.scatter(transformed[random_mask, 0], transformed[random_mask, 1], s=1)
 
-        colors = ["#2576b0", "#fc822e", "#349f3c", "#d32f2e", "#9368b9"]
+        colors = ["#2576b0", "#fc822e", "#349f3c", "#d32f2e"]
         handles = [
-            mpatches.Patch(color=c, label=label) for c, label in zip(colors, display_labels)
+            mpatches.Patch(color=c, label=label)
+            for c, label in zip(colors, display_labels)
         ]
         ax.legend(handles=handles)
         fig.tight_layout()
@@ -66,15 +74,16 @@ def plot_t5_full_tsne():
 
 
 def plot_t5_hidden_tsne():
-    hiddens = T5_Hidden.evaluate_hidden_states([
-        Path("data", "split", "open-web-text", "test-dirty.jsonl"),
-        Path("data", "split", "open-gpt-text", "test-dirty.jsonl"),
-        Path("data", "split", "open-palm-text", "test-dirty.jsonl"),
-        Path("./data/split/open-llama-text/test-dirty.jsonl"),
-        Path("./data/split/gpt2-output/test-dirty.jsonl")
-    ])
-    labels = ["openweb", "chatgpt", "palm", "llama", "gpt2_xl"]
-    display_labels = ["Human", "GPT3.5", "PaLM", "LLaMA", "GPT2-XL"]
+    hiddens = T5_Hidden.evaluate_hidden_states(
+        [
+            Path("data", "split", "Human", "test-dirty.jsonl"),
+            Path("data", "split", "GPT-4", "test-dirty.jsonl"),
+            Path("data", "split", "Claude-Instant-v1", "test-dirty.jsonl"),
+            Path("data", "split", "Gemini-Pro", "test-dirty.jsonl"),
+        ]
+    )
+    labels = ["Human", "ChatGPT", "Claude", "Gemini"]
+    display_labels = ["Human", "GPT-4", "Claude 3.5 Haiku", "Gemini 2.0 Flash"]
     perplexities = [5, 10, 25, 50, 75, 100]
     # perplexities = [100]
     for perplexity in perplexities:
@@ -88,21 +97,22 @@ def plot_t5_hidden_tsne():
             random_mask = np.random.randn(*(transformed[:, 0].shape)) < 0.2
             ax.scatter(transformed[random_mask, 0], transformed[random_mask, 1], s=1)
 
-        colors = ["#2576b0", "#fc822e", "#349f3c", "#d32f2e", "#9368b9"]
+        colors = ["#2576b0", "#fc822e", "#349f3c", "#d32f2e"]
         handles = [
-            mpatches.Patch(color=c, label=label) for c, label in zip(colors, display_labels)
+            mpatches.Patch(color=c, label=label)
+            for c, label in zip(colors, display_labels)
         ]
         ax.legend(handles=handles)
         fig.tight_layout()
         fig.savefig("result/hidden/" + "tsne_" + str(perplexity) + ".pdf")
 
+
 if __name__ == "__main__":
     TASKS = [
         plot_t5_full_tsne,
-        plot_t5_hidden_tsne
+        # plot_t5_hidden_tsne
     ]
 
     for task in TASKS:
         print("Executing task: ", task.__name__)
         task()
-
