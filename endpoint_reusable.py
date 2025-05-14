@@ -11,7 +11,7 @@ model = pipeline.ExecuteT5(Path("./data/checkpoint/T5Sentinel.0613.pt"))
 
 @app.get("/")
 def read_root():
-    return {"message": "Hello from Runpod!"}
+    return {"message": "Hello from T5-Multi!"}
 
 
 @app.post("/predict")
@@ -25,4 +25,5 @@ async def predict(request: Request):
     return {
         "prediction": labels[prediction],
         "score": str(result["data"][numpy.argmax(result["data"])]),
+        "per_class": result["data"],
     }
